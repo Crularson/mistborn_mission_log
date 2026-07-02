@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-labelledby="title desc">
+  <title id="title">Steel and ash crew seal</title>
+  <desc id="desc">A circular metal seal with a stylized spear and ash marks.</desc>
+  <defs>
+    <linearGradient id="metal" x1="18" y1="18" x2="102" y2="102" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f4d47b"/>
+      <stop offset=".45" stop-color="#8fa5b2"/>
+      <stop offset="1" stop-color="#303c46"/>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="53" fill="#111820" stroke="url(#metal)" stroke-width="6"/>
+  <circle cx="60" cy="60" r="40" fill="none" stroke="#42515c" stroke-width="2" stroke-dasharray="4 7"/>
+  <path d="M61 20l10 33 29 7-29 7-10 33-10-33-29-7 29-7z" fill="url(#metal)"/>
+  <path d="M33 79c12 8 40 9 55-3M29 43c16-8 45-7 62 3" fill="none" stroke="#aab5bd" stroke-width="4" stroke-linecap="round" opacity=".35"/>
+</svg>

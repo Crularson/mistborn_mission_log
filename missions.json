@@ -1,0 +1,50 @@
+[
+  {
+    "id": "mission001",
+    "date": "1024-04-12",
+    "location": "Luthadel",
+    "district": "Venture District",
+    "threatLevel": "High",
+    "duration": "02:15:00",
+    "metalsUsed": ["Steel", "Tin", "Pewter"],
+    "houseTarget": "House Venture",
+    "status": "Completed",
+    "crewReport": "Observed noble activity near Venture Manor. Burned tin and steel during surveillance. No suspicions raised."
+  },
+  {
+    "id": "mission002",
+    "date": "1024-04-18",
+    "location": "Luthadel",
+    "district": "Canal District",
+    "threatLevel": "Moderate",
+    "duration": "01:05:30",
+    "metalsUsed": ["Copper", "Bronze"],
+    "houseTarget": "House Tekiel",
+    "status": "Completed",
+    "crewReport": "Met with canal workers to confirm guard rotations and supply routes. Coppercloud held steady while bronze checked nearby pulses."
+  },
+  {
+    "id": "mission003",
+    "date": "1024-05-02",
+    "location": "Fadrex Outskirts",
+    "district": "Western Road",
+    "threatLevel": "Low",
+    "duration": "00:47:20",
+    "metalsUsed": ["Tin"],
+    "houseTarget": "",
+    "status": "Completed",
+    "crewReport": "Scouted an abandoned storehouse suitable for temporary shelter. No noble patrols encountered."
+  },
+  {
+    "id": "mission004",
+    "date": "1024-05-16",
+    "location": "Luthadel",
+    "district": "Keep Hasting",
+    "threatLevel": "Critical",
+    "duration": "03:10:45",
+    "metalsUsed": ["Steel", "Iron", "Pewter", "Zinc"],
+    "houseTarget": "House Hasting",
+    "status": "In Review",
+    "crewReport": "Diversion drew guards from the east gate while crew members mapped servant passages. Zinc was used sparingly to avoid pattern recognition."
+  }
+]
