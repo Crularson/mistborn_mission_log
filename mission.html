@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Detailed mission report for Kelsier's crew." />
+    <title>Mission Report | Kelsier's Crew Mission Log</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+    <script type="module" src="./src/mission.js"></script>
+    <script defer src="./src/fallback.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to mission report</a>
+
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Primary navigation">
+        <a class="brand" href="./index.html" aria-label="Kelsier's Crew Mission Log home">
+          <img src="./assets/crew-seal.svg" alt="Steel and ash crew seal" />
+          <span>
+            <strong>Kelsier's Crew</strong>
+            <small>Mission Log</small>
+          </span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="primary-menu"
+          aria-label="Open navigation menu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <div class="nav-menu" id="primary-menu">
+          <a href="./index.html">Archive</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main-content" class="detail-main">
+      <a class="back-link" href="./index.html">Back to archive</a>
+      <section id="mission-detail" aria-live="polite"></section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+
+    <footer class="site-footer">
+      <p>Confidential archive for skaa crew operations.</p>
+    </footer>
+  </body>
+</html>

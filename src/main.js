@@ -1,60 +1,96 @@
-import './style.css'
-import javascriptLogo from './assets/javascript.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import { setupCounter } from './counter.js'
+import { getAllMissions } from "./data.js";
+import { saveMission } from "./storage.js";
+import { setupModal, setupResponsiveMenu } from "./modal.js";
+import { renderFilterOptions, renderMissionCards, showConfirmationDialog } from "./render.js";
+import { missionFromForm, showFormErrors, validateMissionForm } from "./validation.js";
 
-document.querySelector('#app').innerHTML = `
-<section id="center">
-  <div class="hero">
-    <img src="${heroImg}" class="base" width="170" height="179">
-    <img src="${javascriptLogo}" class="framework" alt="JavaScript logo"/>
-    <img src="${viteLogo}" class="vite" alt="Vite logo" />
-  </div>
-  <div>
-    <h1>Get started</h1>
-    <p>Edit <code>src/main.js</code> and save to test <code>HMR</code></p>
-  </div>
-  <button id="counter" type="button" class="counter"></button>
-</section>
+window.__missionAppReady = true;
 
-<div class="ticks"></div>
+const state = {
+  missions: []
+};
 
-<section id="next-steps">
-  <div id="docs">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#documentation-icon"></use></svg>
-    <h2>Documentation</h2>
-    <p>Your questions, answered</p>
-    <ul>
-      <li>
-        <a href="https://vite.dev/" target="_blank">
-          <img class="logo" src="${viteLogo}" alt="" />
-          Explore Vite
-        </a>
-      </li>
-      <li>
-        <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-          <img class="button-icon" src="${javascriptLogo}" alt="">
-          Learn more
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div id="social">
-    <svg class="icon" role="presentation" aria-hidden="true"><use href="/icons.svg#social-icon"></use></svg>
-    <h2>Connect with us</h2>
-    <p>Join the Vite community</p>
-    <ul>
-      <li><a href="https://github.com/vitejs/vite" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#github-icon"></use></svg>GitHub</a></li>
-      <li><a href="https://chat.vite.dev/" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#discord-icon"></use></svg>Discord</a></li>
-      <li><a href="https://x.com/vite_js" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#x-icon"></use></svg>X.com</a></li>
-      <li><a href="https://bsky.app/profile/vite.dev" target="_blank"><svg class="button-icon" role="presentation" aria-hidden="true"><use href="/icons.svg#bluesky-icon"></use></svg>Bluesky</a></li>
-    </ul>
-  </div>
-</section>
+const missionList = document.querySelector("#mission-list");
+const filtersForm = document.querySelector("#filters-form");
+const missionCount = document.querySelector("#mission-count");
+const missionForm = document.querySelector("#mission-form");
+const modalElement = document.querySelector("#mission-modal");
+const modal = setupModal(modalElement);
 
-<div class="ticks"></div>
-<section id="spacer"></section>
-`
+document.querySelectorAll("[data-open-mission-modal]").forEach((button) => {
+  button.addEventListener("click", modal.openModal);
+});
 
-setupCounter(document.querySelector('#counter'))
+setupResponsiveMenu();
+initializeArchive();
+
+filtersForm.addEventListener("input", renderFilteredMissions);
+
+missionForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const result = validateMissionForm(missionForm);
+  showFormErrors(missionForm, result.errors);
+
+  if (!result.isValid) {
+    const firstInvalid = missionForm.querySelector("[aria-invalid='true']");
+    firstInvalid?.focus();
+    return;
+  }
+
+  const mission = missionFromForm(result.values);
+  saveMission(mission);
+  state.missions = [mission, ...state.missions];
+  missionForm.reset();
+  modal.closeModal();
+  renderFilterOptions(state.missions);
+  renderFilteredMissions();
+  showConfirmationDialog();
+});
+
+async function initializeArchive() {
+  try {
+    state.missions = await getAllMissions();
+    renderFilterOptions(state.missions);
+    renderFilteredMissions();
+  } catch (error) {
+    missionList.innerHTML = `
+      <article class="empty-state">
+        <h3>Mission archive unavailable</h3>
+        <p>${error.message}</p>
+      </article>
+    `;
+  }
+}
+
+function renderFilteredMissions() {
+  const formData = new FormData(filtersForm);
+  const search = String(formData.get("search") || "").toLowerCase();
+  const threat = formData.get("threat");
+  const location = formData.get("location");
+  const target = formData.get("target");
+
+  const filteredMissions = state.missions.filter((mission) => {
+    const searchableText = [
+      mission.location,
+      mission.district,
+      mission.threatLevel,
+      mission.houseTarget,
+      mission.status,
+      mission.crewReport,
+      ...(mission.metalsUsed || [])
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return (
+      (!search || searchableText.includes(search)) &&
+      (!threat || mission.threatLevel === threat) &&
+      (!location || mission.location === location) &&
+      (!target || mission.houseTarget === target)
+    );
+  });
+
+  missionCount.textContent = `${filteredMissions.length} of ${state.missions.length} missions shown`;
+  renderMissionCards(filteredMissions, missionList);
+}
