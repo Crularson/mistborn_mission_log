@@ -19,7 +19,7 @@ export function setupModal(modalElement) {
 
   closeButtons.forEach((button) => button.addEventListener("click", closeModal));
 
-  modalElement.addEventListener("click", (event) => {
+  modalElement.addEventListener("pointerdown", (event) => {
     if (event.target === modalElement) {
       closeModal();
     }
